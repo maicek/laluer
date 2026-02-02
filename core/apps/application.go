@@ -5,8 +5,9 @@ type Application struct {
 	Name        string
 	Description string
 	GenericName string
-
-	NoDisplay bool
+	Icon        string
+	IconBase64  string
+	NoDisplay   bool
 	// Parameters needed for proper execution
 	Exec     string
 	Terminal bool

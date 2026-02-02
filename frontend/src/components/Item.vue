@@ -9,7 +9,7 @@ const { data } = defineProps<{
 
 <template>
   <div class="Item" :class="{ active: active }">
-    {{ data }}
+   <img :src="'data:image/png;base64,' + data.iconBase64" :alt="data.label" />
   </div>
 </template>
 

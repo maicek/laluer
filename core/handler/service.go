@@ -34,9 +34,11 @@ func (h *HandlerService) Handle(searchParams SearchParams) (HandlerResult, error
 
 		if rank >= 0 {
 			results = append(results, Result{
-				Label:    app.Name,
-				Rank:     rank,
-				Subtitle: app.GenericName,
+				Label:      app.Name,
+				Rank:       rank,
+				Icon:       app.Icon,
+				IconBase64: app.IconBase64,
+				Subtitle:   app.GenericName,
 				Action: Action{
 					Event: "run",
 					Payload: struct {

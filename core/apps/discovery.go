@@ -62,6 +62,7 @@ func (a *appService) discoverPath(path string) ([]Application, error) {
 		}
 
 		application.Path = path + "/" + entry.Name()
+		application.IconBase64 = FindIcon(application.Icon)
 		apps = append(apps, application)
 	}
 
