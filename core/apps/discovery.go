@@ -8,6 +8,7 @@ import (
 var discovery_paths = []string{
 	"/usr/share/applications",
 	"$HOME/.local/share/applications",
+	"/var/lib/flatpak/exports/share/applications",
 }
 
 type appService struct {
