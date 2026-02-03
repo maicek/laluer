@@ -34,7 +34,7 @@ func ParseAppFile(file []byte) (Application, error) {
 		GenericName: appDotDesktop.DesktopEntry.GenericName,
 		Exec:        appDotDesktop.DesktopEntry.Exec,
 		Icon:        appDotDesktop.DesktopEntry.Icon,
-		IconBase64:  FindIconInPath(appDotDesktop.DesktopEntry.Icon, "/usr/share/icons/"),
+		IconBase64:  "",
 		NoDisplay:   appDotDesktop.DesktopEntry.NoDisplay,
 		Terminal:    appDotDesktop.DesktopEntry.Terminal,
 	}

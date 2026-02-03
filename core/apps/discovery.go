@@ -13,6 +13,8 @@ var discovery_paths = []string{
 
 type appService struct {
 	Apps []Application
+	// map app name to icon path
+	Icons map[string]string
 }
 
 var AppServiceInstance = &appService{}
@@ -35,6 +37,8 @@ func (a *appService) Discover() (any, error) {
 	a.Apps = discoveredApps
 
 	fmt.Printf("All apps discovered: %d\n", len(discoveredApps))
+
+	a.DiscoverAppIcons()
 
 	return nil, nil
 }
@@ -62,7 +66,7 @@ func (a *appService) discoverPath(path string) ([]Application, error) {
 		}
 
 		application.Path = path + "/" + entry.Name()
-		application.IconBase64 = FindIcon(application.Icon)
+		application.IconBase64 = ""
 		apps = append(apps, application)
 	}
 
