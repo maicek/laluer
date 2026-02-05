@@ -69,16 +69,16 @@ func main() {
 	app.Window.NewWithOptions(application.WebviewWindowOptions{
 		Title:            "Laluer",
 		BackgroundColour: application.NewRGBA(0, 0, 0, 0),
-		Width:            500,
-		Height:           340,
+		Width:            550,
+		Height:           440,
 		AlwaysOnTop:      alwaysOnTop,
 		DisableResize:    disableResize,
 		Frameless:        frameless,
 		InitialPosition:  application.WindowCentered,
 		URL:              "/",
-		BackgroundType:   application.BackgroundTypeSolid,
+		BackgroundType:   application.BackgroundTypeTranslucent,
 		Linux: application.LinuxWindow{
-			WindowIsTranslucent: false,
+			WindowIsTranslucent: true,
 		},
 	})
 

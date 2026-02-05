@@ -61,6 +61,7 @@ export class Result {
     "rank": number;
     "icon": string;
     "iconBase64": string;
+    "iconMime": string;
     "action": Action;
 
     /** Creates a new Result instance. */
@@ -80,6 +81,9 @@ export class Result {
         if (!("iconBase64" in $$source)) {
             this["iconBase64"] = "";
         }
+        if (!("iconMime" in $$source)) {
+            this["iconMime"] = "";
+        }
         if (!("action" in $$source)) {
             this["action"] = (new Action());
         }
@@ -91,10 +95,10 @@ export class Result {
      * Creates a new Result instance from a string or object.
      */
     static createFrom($$source: any = {}): Result {
-        const $$createField5_0 = $$createType2;
+        const $$createField6_0 = $$createType2;
         let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
         if ("action" in $$parsedSource) {
-            $$parsedSource["action"] = $$createField5_0($$parsedSource["action"]);
+            $$parsedSource["action"] = $$createField6_0($$parsedSource["action"]);
         }
         return new Result($$parsedSource as Partial<Result>);
     }

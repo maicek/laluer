@@ -13,7 +13,6 @@ var HOME = os.Getenv("HOME")
 var discovery_paths = []string{
 	"/usr/share/applications",
 	HOME + "/.local/share/applications",
-	HOME + "/.local/share/applications",
 	"/var/lib/flatpak/exports/share/applications",
 }
 

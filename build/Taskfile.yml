@@ -16,10 +16,10 @@ tasks:
     generates:
       - node_modules
     preconditions:
-      - sh: bun -v
-        msg: "Looks like bun isn't installed. Look at https://bun.sh/"
+      - sh: npm -v
+        msg: "Looks like npm isn't installed."
     cmds:
-      - bun install
+      - npm install
 
   build:frontend:
     label: build:frontend (DEV={{.DEV}})
@@ -36,7 +36,7 @@ tasks:
           BUILD_FLAGS:
             ref: .BUILD_FLAGS
     cmds:
-      - bun --bun run {{.BUILD_COMMAND}}
+      - npm run {{.BUILD_COMMAND}}
     env:
       PRODUCTION: '{{if eq .DEV "true"}}false{{else}}true{{end}}'
     vars:
@@ -111,7 +111,7 @@ tasks:
     deps:
       - task: install:frontend:deps
     cmds:
-      - bun --bun run dev -- --port {{.VITE_PORT}} --strictPort
+      - npm run dev -- --port {{.VITE_PORT}} --strictPort
 
   update:build-assets:
     summary: Updates the build assets

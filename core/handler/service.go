@@ -10,6 +10,13 @@ import (
 
 type HandlerService struct{}
 
+func bestSubtitle(genericName, description string) string {
+	if genericName != "" {
+		return genericName
+	}
+	return description
+}
+
 type SearchParams struct {
 	Query string `json:"query"`
 }
@@ -26,11 +33,22 @@ func (h *HandlerService) Handle(searchParams SearchParams) (HandlerResult, error
 
 	for _, app := range apps.AppServiceInstance.Apps {
 		// Skip hidden apps
-		if app.NoDisplay {
+		if app.NoDisplay || app.Hidden {
 			continue
 		}
 
-		rank := fuzzy.RankMatchNormalized(queryLowercase, strings.ToLower(app.Name))
+		nameRank := fuzzy.RankMatchNormalized(queryLowercase, strings.ToLower(app.Name))
+		genericRank := fuzzy.RankMatchNormalized(queryLowercase, strings.ToLower(app.GenericName))
+		descRank := fuzzy.RankMatchNormalized(queryLowercase, strings.ToLower(app.Description))
+
+		// pick the best (lowest) rank among name, generic name, description
+		rank := nameRank
+		if genericRank >= 0 && (rank < 0 || genericRank < rank) {
+			rank = genericRank
+		}
+		if descRank >= 0 && (rank < 0 || descRank < rank) {
+			rank = descRank
+		}
 
 		if rank >= 0 {
 			results = append(results, Result{
@@ -38,7 +56,8 @@ func (h *HandlerService) Handle(searchParams SearchParams) (HandlerResult, error
 				Rank:       rank,
 				Icon:       app.Icon,
 				IconBase64: app.IconBase64,
-				Subtitle:   app.GenericName,
+				IconMime:   app.IconMime,
+				Subtitle:   bestSubtitle(app.GenericName, app.Description),
 				Action: Action{
 					Event: "run",
 					Payload: struct {

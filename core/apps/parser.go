@@ -11,6 +11,7 @@ type DesktopEntry struct {
 	Exec        string `ini:"Exec"`
 	Icon        string `ini:"Icon"`
 	NoDisplay   bool   `ini:"NoDisplay"`
+	Hidden      bool   `ini:"Hidden"`
 	Terminal    bool   `ini:"Terminal"`
 }
 
@@ -36,6 +37,7 @@ func ParseAppFile(file []byte) (Application, error) {
 		Icon:        appDotDesktop.DesktopEntry.Icon,
 		IconBase64:  "",
 		NoDisplay:   appDotDesktop.DesktopEntry.NoDisplay,
+		Hidden:      appDotDesktop.DesktopEntry.Hidden,
 		Terminal:    appDotDesktop.DesktopEntry.Terminal,
 	}
 

@@ -7,7 +7,9 @@ type Application struct {
 	GenericName string
 	Icon        string
 	IconBase64  string
+	IconMime    string
 	NoDisplay   bool
+	Hidden      bool
 	// Parameters needed for proper execution
 	Exec     string
 	Terminal bool
