@@ -13,6 +13,7 @@ const { data } = defineProps<{
       class="Item__icon"
       :src="`data:image/svg+xml;base64,${data.iconBase64}`"
       :alt="data.label"
+      :key="data.iconBase64"
       @error="
         (item) => (item.target as HTMLImageElement).classList.add('error')
       "
