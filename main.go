@@ -3,6 +3,7 @@ package main
 import (
 	"embed"
 	_ "embed"
+	"flag"
 	"log"
 
 	"github.com/maicek/laluer/core/apps"
@@ -30,7 +31,9 @@ func init() {
 // and starts a goroutine that emits a time-based event every second. It subsequently runs the application and
 // logs any error that might occur.
 func main() {
+	// read environment variables
 
+	floating := flag.Bool("floating", false, "float window")
 	// Create a new Wails application by providing the necessary options.
 	// Variables 'Name' and 'Description' are for application metadata.
 	// 'Assets' configures the asset server with the 'FS' variable pointing to the frontend files.
@@ -58,7 +61,7 @@ func main() {
 	// 'BackgroundColour' is the background colour of the window.
 	// 'URL' is the URL that will be loaded into the webview.
 
-	isDev := true
+	isDev := *floating
 	disableResize := !isDev
 	frameless := !isDev
 	alwaysOnTop := !isDev
@@ -66,8 +69,8 @@ func main() {
 	app.Window.NewWithOptions(application.WebviewWindowOptions{
 		Title:            "Laluer",
 		BackgroundColour: application.NewRGBA(0, 0, 0, 0),
-		Width:            300,
-		Height:           100,
+		Width:            500,
+		Height:           340,
 		AlwaysOnTop:      alwaysOnTop,
 		DisableResize:    disableResize,
 		Frameless:        frameless,

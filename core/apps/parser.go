@@ -9,6 +9,7 @@ type DesktopEntry struct {
 	Comment     string `ini:"Comment"`
 	GenericName string `ini:"GenericName"`
 	Exec        string `ini:"Exec"`
+	Icon        string `ini:"Icon"`
 	NoDisplay   bool   `ini:"NoDisplay"`
 	Terminal    bool   `ini:"Terminal"`
 }
@@ -32,6 +33,8 @@ func ParseAppFile(file []byte) (Application, error) {
 		Description: appDotDesktop.DesktopEntry.Comment,
 		GenericName: appDotDesktop.DesktopEntry.GenericName,
 		Exec:        appDotDesktop.DesktopEntry.Exec,
+		Icon:        appDotDesktop.DesktopEntry.Icon,
+		IconBase64:  "",
 		NoDisplay:   appDotDesktop.DesktopEntry.NoDisplay,
 		Terminal:    appDotDesktop.DesktopEntry.Terminal,
 	}
