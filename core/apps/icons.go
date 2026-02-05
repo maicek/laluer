@@ -6,11 +6,12 @@ import (
 	"os"
 )
 
-// todo: support other icon formats
+// todo: enhance icon discovery
 // todo: support other icon sizes
 // todo: support fetching proper system theme
 // todo: support caching
-// todo: Replace base64 encoding with direct file serving via providing embedded FS to frontend
+// todo: support other icon formats
+// todo: Replace base64 encoding with direct file serving via providing embedded FS to frontend (maicek)
 
 var icon_paths = []string{
 	"/usr/share/icons",
