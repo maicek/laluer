@@ -32,7 +32,7 @@ useEventListener('keydown', (e) => {
     case 'ArrowDown':
       activeIndex.value = Math.min(
         results.value.items.length - 1,
-        activeIndex.value + 1
+        activeIndex.value + 1,
       );
       e.preventDefault();
       break;
@@ -74,11 +74,12 @@ useEventListener('keydown', (e) => {
 
   input {
     width: 100%;
-    height: 40px;
+    height: 60px;
     font-size: 20px;
     padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    border: 2px solid rgba(32, 64, 122, 0.6);
+    background-color: rgba(15, 26, 46, 0.5);
+    border-radius: 8px;
     text-align: center;
   }
 }

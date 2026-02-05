@@ -38,7 +38,7 @@ func (h *HandlerService) Handle(searchParams SearchParams) (HandlerResult, error
 				Rank:       rank,
 				Icon:       app.Icon,
 				IconBase64: app.IconBase64,
-				Subtitle:   app.GenericName,
+				Subtitle:   app.Description,
 				Action: Action{
 					Event: "run",
 					Payload: struct {
