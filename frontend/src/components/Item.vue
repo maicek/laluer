@@ -11,7 +11,7 @@ const { data } = defineProps<{
   <div class="Item" :class="{ active: active }">
     <img
       class="Item__icon"
-      :src="`data:image/svg+xml;base64,${data.iconBase64}`"
+      :src="data.iconBase64"
       :alt="data.label"
       :key="data.iconBase64"
       @error="
