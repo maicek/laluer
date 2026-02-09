@@ -76,6 +76,8 @@ useEventListener('keydown', (e) => {
   -webkit-backdrop-filter: blur(10px);
 
   input {
+    box-sizing: border-box;
+    outline: none;
     width: 100%;
     height: 60px;
     font-size: 20px;
@@ -84,6 +86,10 @@ useEventListener('keydown', (e) => {
     background-color: rgba(15, 26, 46, 0.5);
     border-radius: 8px;
     text-align: center;
+
+    &:focus {
+      outline: none;
+    }
   }
 }
 
