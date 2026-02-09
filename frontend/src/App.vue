@@ -85,6 +85,19 @@ watchEffect(() => {
     top: rect?.offsetTop - parent.value?.offsetTop - 130,
   });
 });
+
+const nekoImageUrl = ref('')
+
+const fetchNekoImage = async () => {
+    fetch('https://api.nekosia.cat/api/v1/images/catgirl')
+        .then(res => res.json())
+        .then(json => {
+            nekoImageUrl.value = json.image.original.url
+        })
+}
+
+fetchNekoImage()
+
 </script>
 
 <template>
@@ -110,6 +123,35 @@ watchEffect(() => {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 
+  overflow: hidden !important;
+
+  ::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    background-image: v-bind('`url("${nekoImageUrl}")`');
+    background-position: center top;
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    filter: blur(2px);
+    transform: scale(1.1);
+
+    z-index: -2;
+
+
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: -1;
+
+  }
+
   input {
     box-sizing: border-box;
     outline: none;
@@ -118,7 +160,7 @@ watchEffect(() => {
     font-size: 20px;
     padding: 10px;
     border: 2px solid rgba(32, 64, 122, 0.6);
-    background-color: rgba(15, 26, 46, 0.5);
+    background-color: rgba(33, 33, 33, 0.44);
     border-radius: 8px;
     text-align: center;
     flex: 0 0 50px;
@@ -128,6 +170,8 @@ watchEffect(() => {
     }
   }
 }
+
+
 
 .Results {
   display: flex;
