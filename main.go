@@ -4,10 +4,12 @@ import (
 	"embed"
 	_ "embed"
 	"flag"
+	"fmt"
 	"log"
 
 	"github.com/maicek/laluer/core/apps"
 	"github.com/maicek/laluer/core/handler"
+	"github.com/maicek/laluer/core/history"
 	"github.com/wailsapp/wails/v3/pkg/application"
 )
 
@@ -20,7 +22,14 @@ import (
 var assets embed.FS
 
 func init() {
+	_, err := history.Init()
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("History initialized")
 	go apps.AppServiceInstance.Discover()
+
+	handler.LoadRecent()
 	// Register a custom event whose associated data type is string.
 	// This is not required, but the binding generator will pick up registered events
 	// and provide a strongly typed JS/TS API for them.
@@ -89,4 +98,5 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 }

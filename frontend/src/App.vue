@@ -16,12 +16,18 @@ const searchQuery = ref('');
 const results = ref<HandlerResult>({ items: [] });
 const activeIndex = ref(0);
 
-watch(searchQuery, async () => {
-  results.value = await Handle({
-    query: searchQuery.value,
-  });
-  activeIndex.value = 0;
-});
+watch(
+  searchQuery,
+  async () => {
+    results.value = await Handle({
+      query: searchQuery.value,
+    });
+    activeIndex.value = 0;
+  },
+  {
+    immediate: true,
+  },
+);
 
 useEventListener('keydown', (e) => {
   switch (e.key) {

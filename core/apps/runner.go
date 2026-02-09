@@ -5,10 +5,14 @@ import (
 	"os"
 	"os/exec"
 	"syscall"
+
+	"github.com/maicek/laluer/core/history"
 )
 
 func (a *Application) Run() error {
 	fmt.Printf("Running %s\n", a.Name)
+
+	history.Service.Push(history.ENTRY_TYPE_APP, a.Path)
 
 	if a.Terminal {
 		// not implemented
