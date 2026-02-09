@@ -1,29 +1,15 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref, useTemplateRef, watch } from 'vue';
 import { Result } from '../../bindings/github.com/maicek/laluer/core/handler';
 
 const props = defineProps<{
   active: boolean;
   data: Result;
 }>();
-
-const itemRef = ref<HTMLElement | null>(null);
-
-watch(() => props.active, (isActive) => {
-  if (isActive && itemRef.value) {
-    itemRef.value.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }
-});
 </script>
 
 <template>
-  <div
-    ref="itemRef"
-    class="Item"
-    v-if="props.data.iconBase64 !== '' && props.data.iconBase64 !== null"
-    :style="{ display: props.data.iconBase64 !== '' && props.data.iconBase64 !== null ? 'flex' : 'none' }"
-    :class="{ active: active }"
-  >
+  <div class="Item" :class="{ active: active }">
     <img
       class="Item__icon"
       :src="props.data.iconBase64"
@@ -42,8 +28,8 @@ watch(() => props.active, (isActive) => {
 </template>
 
 <style lang="scss" scoped>
-
 .Item {
+  flex-shrink: 0;
   border-radius: 10px;
   padding: 10px;
 
@@ -54,8 +40,11 @@ watch(() => props.active, (isActive) => {
   flex-direction: row;
   align-items: center;
   gap: 10px;
+  height: 60px !important;
+  // max-height: 60px;
+  overflow: hidden;
 
-  transition: all 0.03s ease;
+  // transition: all 0.03s ease;
 
   .Item__content {
     display: flex;
@@ -75,9 +64,10 @@ watch(() => props.active, (isActive) => {
   }
 
   img {
-    width: 32px;
-    height: 32px;
+    width: 32px !important;
+    height: 32px !important;
     object-fit: contain;
+    aspect-ratio: 1/1 !important;
 
     &.error {
       display: none;

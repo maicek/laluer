@@ -79,7 +79,7 @@ func main() {
 		Title:            "Laluer",
 		BackgroundColour: application.NewRGBA(0, 0, 0, 0),
 		Width:            500,
-		Height:           340,
+		Height:           400,
 		AlwaysOnTop:      alwaysOnTop,
 		DisableResize:    disableResize,
 		Frameless:        frameless,
