@@ -14,7 +14,25 @@ import (
 // todo: support caching
 // todo: Replace base64 encoding with direct file serving via providing embedded FS to frontend (maicek)
 
-var SEARCH_PATTERNS = []SearchPattern{
+type IconPathSearchPattern struct {
+	Path   string
+	Format string
+}
+
+type IconFormatSearchPattern struct {
+	Size      string
+	Extension string
+}
+
+var ICON_PATHS = []IconPathSearchPattern{
+	{Path: "/usr/share/icons", Format: "%s/%s/%s/apps/%s.%s"},
+	{Path: HOME + "/.local/share/icons", Format: "%s/%s/%s/apps/%s.%s"},
+	{Path: HOME + "/.icons", Format: "%s/%s/%s/apps/%s.%s"},
+	{Path: "/var/lib/flatpak/exports/share/icons", Format: "%s/%s/%s/apps/%s.%s"},
+	{Path: "/usr/share/pixmaps", Format: "%[1]s/%[4]s.%[5]s"},
+}
+
+var SEARCH_PATTERNS = []IconFormatSearchPattern{
 	{Size: "scalable", Extension: "svg"},
 	{Size: "32x32", Extension: "png"},
 	{Size: "48x48", Extension: "png"},
@@ -22,19 +40,6 @@ var SEARCH_PATTERNS = []SearchPattern{
 	{Size: "128x128", Extension: "png"},
 	{Size: "256x256", Extension: "png"},
 	{Size: "512x512", Extension: "png"},
-}
-
-type IconPathSearchPattern struct {
-	Path   string
-	Format string
-}
-
-var icon_paths = []IconPathSearchPattern{
-	{Path: "/usr/share/icons", Format: "%s/%s/%s/apps/%s.%s"},
-	{Path: HOME + "/.local/share/icons", Format: "%s/%s/%s/apps/%s.%s"},
-	{Path: HOME + "/.icons", Format: "%s/%s/%s/apps/%s.%s"},
-	{Path: "/var/lib/flatpak/exports/share/icons", Format: "%s/%s/%s/apps/%s.%s"},
-	{Path: "/usr/share/pixmaps", Format: "%[1]s/%[4]s.%[5]s"},
 }
 
 func (a *appService) DiscoverAppIcons() {
@@ -50,28 +55,23 @@ func (a *appService) DiscoverAppIcons() {
 	wg.Wait()
 }
 
-type SearchPattern struct {
-	Size      string
-	Extension string
+func searchPathForIcons(path string, format string, app Application) string {
+	theme := "hicolor"
+
+	for _, pattern := range SEARCH_PATTERNS {
+		iconPath := fmt.Sprintf(format, path, theme, pattern.Size, app.Icon, pattern.Extension)
+		_, err := os.Stat(iconPath)
+
+		if err == nil {
+			return iconPath
+		}
+	}
+	return ""
 }
 
 func discoverappIcon(app Application) string {
-	theme := "hicolor"
-
-	searchPath := func(path string, format string) string {
-		for _, pattern := range SEARCH_PATTERNS {
-			iconPath := fmt.Sprintf(format, path, theme, pattern.Size, app.Icon, pattern.Extension)
-			_, err := os.Stat(iconPath)
-
-			if err == nil {
-				return iconPath
-			}
-		}
-		return ""
-	}
-
-	for _, path := range icon_paths {
-		iconPath := searchPath(path.Path, path.Format)
+	for _, path := range ICON_PATHS {
+		iconPath := searchPathForIcons(path.Path, path.Format, app)
 		if iconPath == "" {
 			continue
 		}
