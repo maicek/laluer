@@ -80,17 +80,17 @@ func (h *HandlerService) Handle(searchParams SearchParams) (HandlerResult, error
 }
 
 func adjustRankWithHistory(rank int, entry history.HistoryEntry, now int64) int {
-	ageSeconds := now - entry.LastUsed
+	age := time.Unix(now, 0).Sub(time.Unix(entry.LastUsed, 0))
 	boost := 0
 	// recency buckets (lower rank is better)
 	switch {
-	case ageSeconds <= 3600:
+	case age <= time.Hour:
 		boost += 40
-	case ageSeconds <= 24*3600:
+	case age <= 24*time.Hour:
 		boost += 25
-	case ageSeconds <= 7*24*3600:
+	case age <= 7*time.Hour*24:
 		boost += 12
-	case ageSeconds <= 30*24*3600:
+	case age <= 30*time.Hour*24:
 		boost += 6
 	}
 	if entry.UseCount > 0 {
