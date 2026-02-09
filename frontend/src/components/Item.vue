@@ -8,7 +8,12 @@ const { data } = defineProps<{
 </script>
 
 <template>
-  <div class="Item" :class="{ active: active }">
+  <div
+    class="Item"
+    v-if="data.iconBase64 !== '' && data.iconBase64 !== null"
+    :style="{ display: data.iconBase64 !== '' && data.iconBase64 !== null ? 'flex' : 'none' }"
+    :class="{ active: active }"
+  >
     <img
       class="Item__icon"
       :src="data.iconBase64"
