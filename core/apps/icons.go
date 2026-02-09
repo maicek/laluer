@@ -7,38 +7,12 @@ import (
 	"image"
 	"image/png"
 	"os"
+	"sync"
 )
 
-// todo: enhance icon discovery
-// todo: support other icon sizes
 // todo: support fetching proper system theme
 // todo: support caching
-// todo: support other icon formats
 // todo: Replace base64 encoding with direct file serving via providing embedded FS to frontend (maicek)
-
-var icon_paths = []string{
-	"/usr/share/icons",
-	HOME + "/.local/share/icons",
-	HOME + "/.icons",
-}
-
-func (a *appService) DiscoverAppIcons() {
-	// read icon cache
-	// skip rn.
-
-	// check system theme
-	// temp
-	// theme := "hicolor"
-
-	for i, app := range a.Apps {
-		a.Apps[i].IconBase64 = discoverappIcon(app)
-	}
-}
-
-type SearchPattern struct {
-	Size      string
-	Extension string
-}
 
 var SEARCH_PATTERNS = []SearchPattern{
 	{Size: "scalable", Extension: "svg"},
@@ -50,12 +24,43 @@ var SEARCH_PATTERNS = []SearchPattern{
 	{Size: "512x512", Extension: "png"},
 }
 
+type IconPathSearchPattern struct {
+	Path   string
+	Format string
+}
+
+var icon_paths = []IconPathSearchPattern{
+	{Path: "/usr/share/icons", Format: "%s/%s/%s/apps/%s.%s"},
+	{Path: HOME + "/.local/share/icons", Format: "%s/%s/%s/apps/%s.%s"},
+	{Path: HOME + "/.icons", Format: "%s/%s/%s/apps/%s.%s"},
+	{Path: "/var/lib/flatpak/exports/share/icons", Format: "%s/%s/%s/apps/%s.%s"},
+	{Path: "/usr/share/pixmaps", Format: "%[1]s/%[4]s.%[5]s"},
+}
+
+func (a *appService) DiscoverAppIcons() {
+	var wg sync.WaitGroup
+	for i, app := range a.Apps {
+		wg.Add(1)
+		go func(app Application) {
+			a.Apps[i].IconBase64 = discoverappIcon(app)
+			wg.Done()
+		}(app)
+	}
+
+	wg.Wait()
+}
+
+type SearchPattern struct {
+	Size      string
+	Extension string
+}
+
 func discoverappIcon(app Application) string {
 	theme := "hicolor"
 
-	searchPath := func(path string) string {
+	searchPath := func(path string, format string) string {
 		for _, pattern := range SEARCH_PATTERNS {
-			iconPath := fmt.Sprintf("%s/%s/%s/apps/%s.%s", path, theme, pattern.Size, app.Icon, pattern.Extension)
+			iconPath := fmt.Sprintf(format, path, theme, pattern.Size, app.Icon, pattern.Extension)
 			_, err := os.Stat(iconPath)
 
 			if err == nil {
@@ -66,7 +71,7 @@ func discoverappIcon(app Application) string {
 	}
 
 	for _, path := range icon_paths {
-		iconPath := searchPath(path)
+		iconPath := searchPath(path.Path, path.Format)
 		if iconPath == "" {
 			continue
 		}
