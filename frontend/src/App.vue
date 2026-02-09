@@ -8,7 +8,7 @@ import {
   HandlerResult,
   SearchParams,
 } from '../bindings/github.com/maicek/laluer/core/handler';
-import {} from '../bindings/github.com/maicek/laluer/core/handler';
+import { Application } from '@wailsio/runtime';
 import Item from './components/Item.vue';
 import { useEventListener } from '@vueuse/core';
 
@@ -25,6 +25,9 @@ watch(searchQuery, async () => {
 
 useEventListener('keydown', (e) => {
   switch (e.key) {
+    case 'Escape':
+      Application.Quit();
+      break;
     case 'ArrowUp':
       activeIndex.value = Math.max(0, activeIndex.value - 1);
       e.preventDefault();
