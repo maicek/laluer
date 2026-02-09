@@ -1,37 +1,48 @@
 <script setup lang="ts">
+import { ref, watch } from 'vue';
 import { Result } from '../../bindings/github.com/maicek/laluer/core/handler';
 
-const { data } = defineProps<{
+const props = defineProps<{
   active: boolean;
   data: Result;
 }>();
+
+const itemRef = ref<HTMLElement | null>(null);
+
+watch(() => props.active, (isActive) => {
+  if (isActive && itemRef.value) {
+    itemRef.value.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+});
 </script>
 
 <template>
   <div
+    ref="itemRef"
     class="Item"
-    v-if="data.iconBase64 !== '' && data.iconBase64 !== null"
-    :style="{ display: data.iconBase64 !== '' && data.iconBase64 !== null ? 'flex' : 'none' }"
+    v-if="props.data.iconBase64 !== '' && props.data.iconBase64 !== null"
+    :style="{ display: props.data.iconBase64 !== '' && props.data.iconBase64 !== null ? 'flex' : 'none' }"
     :class="{ active: active }"
   >
     <img
       class="Item__icon"
-      :src="data.iconBase64"
-      :alt="data.label"
-      :key="data.iconBase64"
+      :src="props.data.iconBase64"
+      :alt="props.data.label"
+      :key="props.data.iconBase64"
       @error="
         (item) => (item.target as HTMLImageElement).classList.add('error')
       "
     />
 
     <div class="Item__content">
-      <span class="Item__content-label">{{ data.label }}</span>
-      <span class="Item__content-description">{{ data.subtitle }}</span>
+      <span class="Item__content-label">{{ props.data.label }}</span>
+      <span class="Item__content-description">{{ props.data.subtitle }}</span>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
+
 .Item {
   border-radius: 10px;
   padding: 10px;

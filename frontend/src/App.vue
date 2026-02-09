@@ -66,6 +66,8 @@ useEventListener('keydown', (e) => {
 
 <style scoped>
 .App {
+  /* background-image: url('https://media1.tenor.com/m/U4M0YIfHTysAAAAC/anime-megumin.gif'); */
+  filter: blur(.6px);
   width: 100vw;
   height: 100vh;
   display: flex;
