@@ -55,7 +55,7 @@ watch(() => props.active, (isActive) => {
   align-items: center;
   gap: 10px;
 
-  transition: all 0.2s ease;
+  transition: all 0.03s ease;
 
   .Item__content {
     display: flex;
