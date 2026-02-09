@@ -42,6 +42,10 @@ func (h *HandlerService) Handle(searchParams SearchParams) (HandlerResult, error
 			continue
 		}
 
+		if app.IconBase64 == "" {
+			continue
+		}
+
 		rank := fuzzy.RankMatchNormalized(queryLowercase, strings.ToLower(app.Name))
 
 		if rank >= 0 {
