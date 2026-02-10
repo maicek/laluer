@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import { reactive, ref, useTemplateRef, watch, watchEffect } from 'vue';
+import { reactive, ref, useTemplateRef, watch, watchEffect } from "vue";
 import {
   Handle,
   Call,
-} from '../bindings/github.com/maicek/laluer/core/handler/handlerservice';
+} from "../bindings/github.com/maicek/laluer/core/handler/handlerservice";
 import {
   HandlerResult,
   SearchParams,
-} from '../bindings/github.com/maicek/laluer/core/handler';
-import { Application } from '@wailsio/runtime';
-import Item from './components/Item.vue';
-import { useEventListener } from '@vueuse/core';
+} from "../bindings/github.com/maicek/laluer/core/handler";
+import { Application } from "@wailsio/runtime";
+import Item from "./components/Item.vue";
+import { useEventListener } from "@vueuse/core";
 
-const searchQuery = ref('');
-const parent = useTemplateRef('parent');
+const searchQuery = ref("");
+const parent = useTemplateRef("parent");
 const results = ref<HandlerResult>({ items: [] });
 const activeIndex = ref(0);
 
@@ -38,29 +38,29 @@ watchEffect(() => {
   }
 });
 
-useEventListener('keydown', (e) => {
+useEventListener("keydown", (e) => {
   switch (e.key) {
-    case 'Escape':
+    case "Escape":
       Application.Quit();
       break;
-    case 'ArrowUp':
+    case "ArrowUp":
       activeIndex.value = Math.max(0, activeIndex.value - 1);
       e.preventDefault();
       break;
-    case 'ArrowDown':
+    case "ArrowDown":
       activeIndex.value = Math.min(
         results.value.items.length - 1,
         activeIndex.value + 1,
       );
       e.preventDefault();
       break;
-    case 'Enter':
+    case "Enter":
       if (results.value.items.length > 0) {
         Call(results.value.items[activeIndex.value].action);
       }
       break;
-    case 'ArrowLeft':
-    case 'ArrowRight':
+    case "ArrowLeft":
+    case "ArrowRight":
       e.preventDefault();
       break;
   }
@@ -76,7 +76,7 @@ const handleWheelInput = (e: WheelEvent) => {
   );
 };
 
-const items = useTemplateRef('items');
+const items = useTemplateRef("items");
 
 watchEffect(() => {
   const rect = items.value?.at(activeIndex.value)?.$el;
@@ -86,18 +86,17 @@ watchEffect(() => {
   });
 });
 
-const nekoImageUrl = ref('')
+// const nekoImageUrl = ref('')
 
-const fetchNekoImage = async () => {
-    fetch('https://api.nekosia.cat/api/v1/images/catgirl')
-        .then(res => res.json())
-        .then(json => {
-            nekoImageUrl.value = json.image.original.url
-        })
-}
+// const fetchNekoImage = async () => {
+//     fetch('https://api.nekosia.cat/api/v1/images/catgirl')
+//         .then(res => res.json())
+//         .then(json => {
+//             nekoImageUrl.value = json.image.original.url
+//         })
+// }
 
-fetchNekoImage()
-
+// fetchNekoImage()
 </script>
 
 <template>
@@ -112,7 +111,7 @@ fetchNekoImage()
   </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .App {
   width: 100vw;
   height: 100vh;
@@ -130,17 +129,15 @@ fetchNekoImage()
     position: absolute;
     inset: 0;
 
-    background-image: v-bind('`url("${nekoImageUrl}")`');
-    background-position: center top;
-    background-size: cover;
-    background-repeat: no-repeat;
+    // background-image: v-bind('`url("${nekoImageUrl}")`');
+    // background-position: center top;
+    // background-size: cover;
+    // background-repeat: no-repeat;
 
     filter: blur(2px);
     transform: scale(1.1);
 
     z-index: -2;
-
-
   }
 
   &::after {
@@ -149,7 +146,6 @@ fetchNekoImage()
     inset: 0;
     background: rgba(0, 0, 0, 0.5);
     z-index: -1;
-
   }
 
   input {
@@ -170,8 +166,6 @@ fetchNekoImage()
     }
   }
 }
-
-
 
 .Results {
   display: flex;
