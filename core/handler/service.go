@@ -49,14 +49,17 @@ func (h *HandlerService) Handle(searchParams SearchParams) (HandlerResult, error
 		rank := fuzzy.RankMatchNormalized(queryLowercase, strings.ToLower(app.Name))
 
 		if rank >= 0 {
+			var lastUsed int64
 			if entry, ok := recentMap[app.Path]; ok {
 				rank = adjustRankWithHistory(rank, entry, now)
+				lastUsed = entry.LastUsed
 			}
 			results = append(results, Result{
 				Label:      app.Name,
 				Rank:       rank,
 				Icon:       app.Icon,
 				IconBase64: app.IconBase64,
+				LastUsed:   lastUsed,
 				Subtitle:   app.Description,
 				Action: Action{
 					Event: "run",
@@ -71,7 +74,10 @@ func (h *HandlerService) Handle(searchParams SearchParams) (HandlerResult, error
 	}
 
 	sort.Slice(results, func(i, j int) bool {
-		return results[i].Rank < results[j].Rank
+		if results[i].Rank != results[j].Rank {
+			return results[i].Rank < results[j].Rank
+		}
+		return results[i].LastUsed > results[j].LastUsed
 	})
 
 	return HandlerResult{

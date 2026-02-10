@@ -6,5 +6,6 @@ type Result struct {
 	Rank       int    `json:"rank"`
 	Icon       string `json:"icon"`
 	IconBase64 string `json:"iconBase64"`
+	LastUsed   int64  `json:"-"`
 	Action     Action `json:"action"`
 }
