@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, useTemplateRef, watch } from 'vue';
-import { Result } from '../../bindings/github.com/maicek/laluer/core/handler';
+import { ref, useTemplateRef, watch } from "vue";
+import { Result } from "../../bindings/github.com/maicek/laluer/core/handler";
 
 const props = defineProps<{
   active: boolean;
@@ -70,7 +70,8 @@ const props = defineProps<{
     aspect-ratio: 1/1 !important;
 
     &.error {
-      display: none;
+      // display: none;
+      opacity: 0;
     }
   }
 }
