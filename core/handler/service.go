@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"sort"
 	"strings"
 	"time"
@@ -112,9 +111,8 @@ func adjustRankWithHistory(rank int, entry history.HistoryEntry, now int64) int 
 	return rank - boost
 }
 
-func LoadRecent() {
+func LoadRecent() []history.HistoryEntry {
 	entries, _ := history.Service.GetLast()
 
-	fmt.Printf("Last: %+v \n", entries)
-
+	return entries
 }
