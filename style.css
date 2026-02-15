@@ -1,0 +1,52 @@
+/* Styling can be overridden by providing a custom style.css file (~/.config/laluer/style.css) */
+
+.App {
+  padding: 10px;
+  background-color: rgba(4, 10, 26, 0.5);
+  /* background-image: url('https://camo.githubusercontent.com/5e45bc648dba68520ce949a53690af6bcef2880f84a1d46cbb1636649afd6d84/68747470733a2f2f796176757a63656c696b65722e6769746875622e696f2f73616d706c652d696d616765732f696d6167652d313032312e6a7067');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat; */
+}
+
+.Header {
+  padding-bottom: 10px;
+}
+
+.Header-Search {
+  border: 2px solid rgba(32, 64, 122, 0.6);
+  background-color: rgba(33, 33, 33, 0.44);
+  outline: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* .Body {
+}
+
+.Body-Results {
+} */
+
+.Item {
+  padding: 10px;
+  border-radius: 10px;
+  border: 2px solid #cccccc40;
+  background-color: rgba(15, 26, 46, 0.2);
+}
+
+.Item--selected {
+  border-color: rgba(21, 63, 141, 0.8);
+  background-color: rgba(15, 26, 46, 0.8);
+}
+
+.Item__name {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.Item__description {
+  font-size: 12px;
+  font-weight: 400;
+  color: #cccccc80;
+}
