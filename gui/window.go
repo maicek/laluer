@@ -3,6 +3,7 @@ package gui
 import (
 	"context"
 
+	"github.com/diamondburned/gotk4/pkg/gdk/v4"
 	"github.com/diamondburned/gotk4/pkg/gtk/v4"
 	"github.com/maicek/laluer/gui/components/item"
 	"github.com/maicek/laluer/gui/components/results"
@@ -27,7 +28,11 @@ type LaluerView struct {
 	Results *results.Results
 }
 
-func NewLaluerWindow(ctx context.Context, app *gtk.Application) *Laluer {
+type LaluerViewInit struct {
+	ItemSelected func(item *item.ResultItem)
+}
+
+func NewLaluerWindow(ctx context.Context, app *gtk.Application, init LaluerViewInit) *Laluer {
 	l := &Laluer{
 		Application: app,
 	}
@@ -39,13 +44,20 @@ func NewLaluerWindow(ctx context.Context, app *gtk.Application) *Laluer {
 	l.window.SetIconName("com.github.maicek.laluer")
 	l.window.SetDecorated(false)
 
-	l.view = newLaluerView()
+	// Keypress handler
+	keyCtrl := gtk.NewEventControllerKey()
+	keyCtrl.SetPropagationPhase(gtk.PhaseCapture)
+	keyCtrl.Connect("key-pressed", l.HandleKeydown)
+	l.window.AddController(keyCtrl)
+
+	// create view
+	l.view = newLaluerView(init)
 	l.window.SetChild(l.view)
 
 	return l
 }
 
-func newLaluerView() *LaluerView {
+func newLaluerView(init LaluerViewInit) *LaluerView {
 	view := LaluerView{
 		Box:  gtk.NewBox(gtk.OrientationVertical, 5),
 		Body: gtk.NewBox(gtk.OrientationVertical, 5),
@@ -69,7 +81,9 @@ func newLaluerView() *LaluerView {
 	scroller.SetVExpand(true)
 
 	view.Header.Append(header.Search)
-	view.Results = results.NewResults()
+	view.Results = results.NewResults(results.ResultsInit{
+		ItemSelected: init.ItemSelected,
+	})
 	view.Body.Append(view.Results)
 
 	view.Box.Append(view.Header)
@@ -88,4 +102,17 @@ func (l *Laluer) SetResults(results []item.ItemData) {
 
 func (l *Laluer) GetInput() *gtk.Entry {
 	return l.view.Header.Search.Input
+}
+
+func (l *Laluer) HandleKeydown(_ *gtk.EventControllerKey, keyval uint, keycode uint, state gdk.ModifierType) bool {
+	switch keyval {
+	case gdk.KEY_Up:
+		l.view.Results.Previous()
+	case gdk.KEY_Down:
+		l.view.Results.Next()
+	case gdk.KEY_Return:
+		l.view.Results.Select()
+	}
+
+	return false // true = zatrzymuje propagację, false = dalej
 }

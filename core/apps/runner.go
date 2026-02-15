@@ -34,3 +34,7 @@ func (a *Application) Run() error {
 
 	return nil
 }
+
+func HandleApplicationExecute(payload interface{}) {
+	fmt.Printf("Payload: %+v\n", payload)
+}

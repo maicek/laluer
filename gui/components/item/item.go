@@ -5,18 +5,24 @@ import (
 	"github.com/diamondburned/gotk4/pkg/pango"
 )
 
+type PayloadData any
+
 type ResultItem struct {
 	*gtk.Box
 
 	Name        *gtk.Label
 	Description *gtk.Label
 	Icon        *gtk.Image
+	Event       string
+	Payload     PayloadData
 }
 
 type ItemData struct {
 	Name        string
 	Description string
 	Icon        string
+	Event       string
+	Payload     PayloadData
 }
 
 func NewResultItem(data ItemData) *ResultItem {
@@ -24,6 +30,8 @@ func NewResultItem(data ItemData) *ResultItem {
 		Box:         gtk.NewBox(gtk.OrientationVertical, 0),
 		Name:        gtk.NewLabel(data.Name),
 		Description: gtk.NewLabel(data.Description),
+		Event:       data.Event,
+		Payload:     data.Payload,
 	}
 
 	item.SetSizeRequest(0, 50)
@@ -61,4 +69,12 @@ func NewResultItem(data ItemData) *ResultItem {
 	item.Box.Append(right)
 
 	return item
+}
+
+func (item *ResultItem) Select() {
+	item.AddCSSClass("Item--selected")
+}
+
+func (item *ResultItem) Deselect() {
+	item.RemoveCSSClass("Item--selected")
 }

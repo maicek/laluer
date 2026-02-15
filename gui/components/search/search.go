@@ -23,6 +23,11 @@ func NewSearch() *Search {
 	search.Input.SetHAlign(gtk.AlignFill)
 	search.Input.AddCSSClass("Header-Search")
 
+	// // disable return key
+	// search.Input.Connect("activate", func() {
+	// 	// do nothing
+	// })
+
 	search.Box.Append(search.Input)
 
 	return search

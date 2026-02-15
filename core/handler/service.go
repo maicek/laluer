@@ -62,9 +62,7 @@ func (h *HandlerService) Handle(searchParams SearchParams) (HandlerResult, error
 				Subtitle:   app.Description,
 				Action: Action{
 					Event: "run",
-					Payload: struct {
-						Path string `json:"path"`
-					}{
+					Payload: ActionRunPayload{
 						Path: app.Path,
 					},
 				},

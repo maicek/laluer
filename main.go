@@ -37,19 +37,26 @@ func MakeApp(ctx context.Context) *LaluerApp {
 	laluer.app = gtk.NewApplication("com.github.maicek.laluer", gio.ApplicationFlagsNone)
 
 	laluer.app.ConnectActivate(func() {
+		// load styles
 		display := gdk.DisplayGetDefault()
 		prov := loadCSSFromFileOrFallback("style.css", styleCSS)
 		gtk.StyleContextAddProviderForDisplay(
 			display, prov,
 			gtk.STYLE_PROVIDER_PRIORITY_APPLICATION,
 		)
+
 		startCSSHotReload(laluer.ctx, display, prov, "style.css", styleCSS)
 
+		// run init routine
 		go laluer.init()
 
-		laluer.window = gui.NewLaluerWindow(ctx, laluer.app)
+		// setup window
+		laluer.window = gui.NewLaluerWindow(ctx, laluer.app, gui.LaluerViewInit{
+			ItemSelected: laluer.HandleItemSelection,
+		})
 		laluer.window.Show()
 
+		// setup input handler
 		input := laluer.window.GetInput()
 		input.ConnectChanged(func() {
 			laluer.HandleInput(input.Text())
@@ -59,10 +66,10 @@ func MakeApp(ctx context.Context) *LaluerApp {
 	return laluer
 }
 
+// Application onInit routine
 func (l *LaluerApp) init() {
 	go apps.AppServiceInstance.Discover()
 	go history.Init()
-	// l.handler = &handler.HandlerService{}
 }
 
 func loadCSS(content string) *gtk.CSSProvider {
@@ -145,6 +152,8 @@ func (l *LaluerApp) HandleResultToGui(results []handler.Result) []item.ItemData 
 		items[i] = item.ItemData{
 			Name:        result.Label,
 			Description: result.Subtitle,
+			Event:       result.Action.Event,
+			Payload:     result.Action.Payload,
 		}
 	}
 
@@ -155,6 +164,13 @@ func (l *LaluerApp) HandleHistoryToGui(results []history.HistoryEntry) []item.It
 	items := make([]item.ItemData, len(results))
 
 	return items
+}
+
+func (l *LaluerApp) HandleItemSelection(item *item.ResultItem) {
+	l.handler.Call(handler.Action{
+		Event:   item.Event,
+		Payload: item.Payload,
+	})
 }
 
 func main() {

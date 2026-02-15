@@ -7,14 +7,20 @@ import (
 )
 
 type Action struct {
-	Event   string `json:"event"`
-	Payload any    `json:"payload"`
+	Event   string
+	Payload any
+}
+
+type ActionRunPayload struct {
+	Path string
 }
 
 func (s *HandlerService) Call(action Action) {
 	switch action.Event {
 	case "run":
-		app := apps.GetApplcationByPath(action.Payload.(map[string]interface{})["path"].(string))
+		payload := action.Payload.(ActionRunPayload)
+		fmt.Printf("Running app: %s\n", payload.Path)
+		app := apps.GetApplcationByPath(payload.Path)
 		if app != nil {
 			app.Run()
 		}
