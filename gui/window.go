@@ -2,6 +2,7 @@ package gui
 
 import (
 	"context"
+	"os"
 
 	"github.com/diamondburned/gotk4/pkg/gdk/v4"
 	"github.com/diamondburned/gotk4/pkg/gtk/v4"
@@ -112,6 +113,8 @@ func (l *Laluer) HandleKeydown(_ *gtk.EventControllerKey, keyval uint, keycode u
 		l.view.Results.Next()
 	case gdk.KEY_Return:
 		l.view.Results.Select()
+	case gdk.KEY_Escape:
+		os.Exit(0)
 	}
 
 	return false // true = zatrzymuje propagację, false = dalej
